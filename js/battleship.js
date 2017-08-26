@@ -1,13 +1,12 @@
 var view = {
   displayMessage: function (msg) {
     var messageArea = document.getElementById('messageArea');
-    console.log(messageArea);
+    // console.log(messageArea);
     messageArea.innerHTML = msg;
   },
 
   displayHit: function (location) {
     var cell = document.getElementById(location);
-    console.log(cell);
     cell.setAttribute('class', 'hit');
   },
 
@@ -30,15 +29,39 @@ var model = {
   ],
 
   fire: function (guess) {
-    for (var i = 0; i < this.numShips.length; i++) {
+    for (var i = 0; i < this.numShips; i++) {
       var ship = this.ships[i];
-      var locations = ship.locations;
-      var index = locations.indexOf(guess);
+      var index = ship.locations.indexOf(guess);
       if (index >= 0) {
         ship.hits[index] = 'hit';
+        view.displayHit(guess);
+        view.displayMessage('Trafiony!');
+        if (this.isSunk(ship)) {
+          view.displayMessage('Zatipiłeś okręt!');
+          this.shipsSunk++;
+        }
+        console.log(this.shipsSunk);
         return true;
       }
+      view.displayMiss(guess);
+      view.displayMessage('Spudłowałeś!')
       return false;
     }
   },
+
+  isSunk: function (ship) {
+    for (var i = 0; i < this.shipLength; i++) {
+      if (ship.hits[i] !== 'hit') {
+        return false;
+      }
+      console.log('isSunk - true');
+      return true;
+    }
+  },
 }; //koniec model
+
+model.fire('06');
+model.fire('16');
+model.fire('56');
+
+console.log(model.ships[0]);

@@ -35,7 +35,11 @@ td {
 }
 
 .hit {
-  background-color: rgba(255, 0, 0, 0.5);
+  background: url("../images/ship.png") no-repeat center center;
+}
+
+.miss {
+  background: url("../images/miss.png") no-repeat center center;
 }
 
 form {

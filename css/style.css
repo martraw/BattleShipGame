@@ -1,3 +1,7 @@
+* {
+  /*box-sizing: border-box;*/
+
+}
 body{
   background-color: black;
 }
@@ -7,5 +11,43 @@ body{
   width: 1024px;
   height: 863px;
   margin: auto;
-  background: url("../images/board.jpg")
+  background: url("../images/board.jpg") no-repeat;
+}
+
+#messageArea {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: rgb(83, 175, 19);
+  background-color: blue;
+}
+
+table {
+  position: absolute;;
+  left: 173px;
+  top: 98px;
+  border-spacing: 0;
+}
+
+td {
+  width: 94px;
+  height: 94px;
+}
+
+.hit {
+  background-color: rgba(255, 0, 0, 0.5);
+}
+
+form {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 15px;
+  background-color: rgb(83, 175, 19);
+}
+
+form input {
+  background-color: rgb(152, 207, 113);
+  border-color: rgb(83, 175, 19);
+  font-size: 1em;
 }

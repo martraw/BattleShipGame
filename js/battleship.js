@@ -1,7 +1,6 @@
 var view = {
   displayMessage: function (msg) {
     var messageArea = document.getElementById('messageArea');
-    // console.log(messageArea);
     messageArea.innerHTML = msg;
   },
 
@@ -32,44 +31,42 @@ var model = {
     for (var i = 0; i < this.numShips; i++) {
       var ship = this.ships[i];
       var index = ship.locations.indexOf(guess);
+
       if (index >= 0) {
         ship.hits[index] = 'hit';
         view.displayHit(guess);
         view.displayMessage('Trafiony!');
+
         if (this.isSunk(ship)) {
           view.displayMessage('Zatipiłeś okręt!');
           this.shipsSunk++;
         }
 
-        console.log(this.shipsSunk);
+        // console.log(this.shipsSunk);
         return true;
       }
-
-      view.displayMiss(guess);
-      view.displayMessage('Spudłowałeś!');
-      return false;
     }
+
+    view.displayMiss(guess);
+    view.displayMessage('Spudłowałeś!');
+    return false;
   },
 
   isSunk: function (ship) {
     for (var i = 0; i < this.shipLength; i++) {
       if (ship.hits[i] !== 'hit') {
+        console.log('isSunk- false');
         return false;
       }
-
-      console.log('isSunk - true');
-      return true;
     }
+
+    console.log('isSunk- true');
+    return true;
   },
 }; //koniec model
 
-var controller = {
-  guesses: 0,
 
-  processGuess: function (guess) {
-
-  },
-};
+// controller.processGuess('A6');
 
 function parseGuess(guess) {
 
@@ -87,6 +84,7 @@ function parseGuess(guess) {
     } else if (row < 0 || row >= model.boardSize || column < 0 || column >= model.boardSize) {
       alert('Ups, pole poza planszą!');
     } else {
+      console.log('parseGuess zwraca: ' + row + column);
       return row + column;
     }
 
@@ -94,14 +92,39 @@ function parseGuess(guess) {
   };
 }
 
-model.fire('06');
-model.fire('16');
-model.fire('56');
+var controller = {
+  guesses: 0,
+
+  processGuess: function (guess) {
+    var location = parseGuess(guess);
+    if (location) {
+      this.guesses++;
+      var hit = model.fire(location);
+      if (hit && model.shipsSunk === model.numShips) {
+        view.displayMessage('Zatopiłeś wszsytkie moje okręty w ' + this.guesses + ' próbach.');
+      }
+    }
+  },
+}; //koniec controller
+
+
+// model.fire('06');
+// model.fire('16');
+// model.fire('56');
 
 // console.log(model.ships[0]);
 
+controller.processGuess('A6');
+controller.processGuess('B6');
+controller.processGuess('C6');
 
-console.log(parseGuess('A0'));
-console.log(parseGuess('A1'));
-console.log(parseGuess('B4'));
-console.log(parseGuess('F4'));
+controller.processGuess('C4');
+controller.processGuess('D4');
+controller.processGuess('E4');
+
+controller.processGuess('B0');
+// console.log(parseGuess('B0'));
+controller.processGuess('B1');
+controller.processGuess('B2');
+
+// controller.processGuess('A0');

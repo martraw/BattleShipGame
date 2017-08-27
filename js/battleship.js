@@ -40,11 +40,13 @@ var model = {
           view.displayMessage('Zatipiłeś okręt!');
           this.shipsSunk++;
         }
+
         console.log(this.shipsSunk);
         return true;
       }
+
       view.displayMiss(guess);
-      view.displayMessage('Spudłowałeś!')
+      view.displayMessage('Spudłowałeś!');
       return false;
     }
   },
@@ -54,14 +56,52 @@ var model = {
       if (ship.hits[i] !== 'hit') {
         return false;
       }
+
       console.log('isSunk - true');
       return true;
     }
   },
 }; //koniec model
 
+var controller = {
+  guesses: 0,
+
+  processGuess: function (guess) {
+
+  },
+};
+
+function parseGuess(guess) {
+
+  var alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+
+  if (guess === null || guess.length !== 2) {
+    alert('Ups, Proszę wpisać literę i cyfrę');
+  } else {
+    var firstChar = guess.charAt(0);
+    var row = alphabet.indexOf(firstChar);
+    var column = guess.charAt(1);
+
+    if (isNaN(row) || isNaN(column)) {
+      alert('Ups, to nie są prawidłowe współrzędne');
+    } else if (row < 0 || row >= model.boardSize || column < 0 || column >= model.boardSize) {
+      alert('Ups, pole poza planszą!');
+    } else {
+      return row + column;
+    }
+
+    return null;
+  };
+}
+
 model.fire('06');
 model.fire('16');
 model.fire('56');
 
-console.log(model.ships[0]);
+// console.log(model.ships[0]);
+
+
+console.log(parseGuess('A0'));
+console.log(parseGuess('A1'));
+console.log(parseGuess('B4'));
+console.log(parseGuess('F4'));

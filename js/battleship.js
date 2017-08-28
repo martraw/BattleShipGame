@@ -89,7 +89,7 @@ function parseGuess(guess) {
     }
 
     return null;
-  };
+  }
 }
 
 var controller = {
@@ -107,6 +107,31 @@ var controller = {
   },
 }; //koniec controller
 
+function init() {
+  var fireButton = document.getElementById('fireButton');
+  fireButton.onclick = handleFireButton;
+  var guessInput = document.getElementById('guessInput');
+  guessInput.onkeypress = handleKeyPress;
+}
+
+function handleFireButton() {
+  var guessInput = document.getElementById('guessInput');
+  var guess = guessInput.value.toUpperCase();
+  console.log(guess);
+  controller.processGuess(guess);
+
+  guessInput.value = '';
+}
+
+function handleKeyPress(e) {
+  var fireButton = document.getElementById('fireButton');
+  if (e.keyCode === 13) {
+    fireButton.click();
+    return false;
+  }
+}
+
+window.onload = init;
 
 // model.fire('06');
 // model.fire('16');
@@ -114,17 +139,17 @@ var controller = {
 
 // console.log(model.ships[0]);
 
-controller.processGuess('A6');
-controller.processGuess('B6');
-controller.processGuess('C6');
-
-controller.processGuess('C4');
-controller.processGuess('D4');
-controller.processGuess('E4');
-
-controller.processGuess('B0');
-// console.log(parseGuess('B0'));
-controller.processGuess('B1');
-controller.processGuess('B2');
+// controller.processGuess('A6');
+// controller.processGuess('B6');
+// controller.processGuess('C6');
+//
+// controller.processGuess('C4');
+// controller.processGuess('D4');
+// controller.processGuess('E4');
+//
+// controller.processGuess('B0');
+// // console.log(parseGuess('B0'));
+// controller.processGuess('B1');
+// controller.processGuess('B2');
 
 // controller.processGuess('A0');

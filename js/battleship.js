@@ -1,3 +1,5 @@
+window.onload = init;
+
 var view = {
   displayMessage: function (msg) {
     var messageArea = document.getElementById('messageArea');
@@ -22,9 +24,9 @@ var model = {
   shipsSunk: 0,
 
   ships: [
-    { locations: ['06', '16', '26'], hits: ['', '', ''] },
-    { locations: ['24', '34', '44'], hits: ['', '', ''] },
-    { locations: ['10', '11', '12'], hits: ['', '', ''] },
+    { locations: [0, 0, 0], hits: ['', '', ''] },
+    { locations: [0, 0, 0], hits: ['', '', ''] },
+    { locations: [0, 0, 0], hits: ['', '', ''] },
   ],
 
   fire: function (guess) {
@@ -63,9 +65,59 @@ var model = {
     console.log('isSunk- true');
     return true;
   },
+
+  generateShipLocations: function () {
+    var locations;
+    for (var i = 0; i < this.numShips; i++) {
+      do {
+        locations = this.generateShip();
+      } while (this.collision(locations));
+      this.ships[i].locations = locations;
+    }
+  },
+
+  generateShip: function () {
+    var direction = Math.floor(Math.random() * 2);
+    var row;
+    var col;
+
+    if (direction === 1) {
+      console.log('Poziomo');
+      row = Math.floor(Math.random() * this.boardSize);
+      col = Math.floor(Math.random() * (this.boardSize - this.shipLength));
+    } else {
+      console.log('Pionowo');
+      row = Math.floor(Math.random() * (this.boardSize - this.shipLength));
+      col = Math.floor(Math.random() * this.boardSize);
+    }
+
+    var newShipLocations = [];
+
+    for (var i = 0; i < this.shipLength; i++) {
+      if (direction === 1) {
+        newShipLocations.push(row + '' + (col + i));
+      } else {
+        newShipLocations.push((row + i) + '' + col);
+      }
+    }
+    return newShipLocations;
+  },
+
+  collision: function(locations) {
+    for (var i = 0; i < this.numShips; i++) {
+      var ship = model.ships[i];
+      for (var j = 0; j < locations.length; j++) {
+        if (ship.locations.indexOf(locations[j]) >= 0) {
+          console.log('Kolozja przy losowaniu na pozycji ' + locations[j]);
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 }; //koniec model
 
-
+model.generateShip();
 // controller.processGuess('A6');
 
 function parseGuess(guess) {
@@ -112,6 +164,12 @@ function init() {
   fireButton.onclick = handleFireButton;
   var guessInput = document.getElementById('guessInput');
   guessInput.onkeypress = handleKeyPress;
+
+  model.generateShipLocations();
+
+  for (var i = 0; i < model.ships.length; i++) {
+    console.log(model.ships[i].locations);
+  }
 }
 
 function handleFireButton() {
@@ -126,30 +184,8 @@ function handleFireButton() {
 function handleKeyPress(e) {
   var fireButton = document.getElementById('fireButton');
   if (e.keyCode === 13) {
-    fireButton.click();
+    // fireButton.click();
+    handleFireButton();
     return false;
   }
 }
-
-window.onload = init;
-
-// model.fire('06');
-// model.fire('16');
-// model.fire('56');
-
-// console.log(model.ships[0]);
-
-// controller.processGuess('A6');
-// controller.processGuess('B6');
-// controller.processGuess('C6');
-//
-// controller.processGuess('C4');
-// controller.processGuess('D4');
-// controller.processGuess('E4');
-//
-// controller.processGuess('B0');
-// // console.log(parseGuess('B0'));
-// controller.processGuess('B1');
-// controller.processGuess('B2');
-
-// controller.processGuess('A0');
